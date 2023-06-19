@@ -1,5 +1,6 @@
 #Affichage du pie chart du nombre d'instance par classe (gravité des accidents)
 import plotly.express as px
+import matplotlib.pyplot as plt
 
 def affichage_nombre_instances_par_classe(df):
     gravite_list = df['descr_grav'].tolist()
@@ -17,3 +18,9 @@ def affichage_nombre_instances_par_classe(df):
     pie=px.pie(compte_gravite, values=E[1], names=E[0],title='Répartition gravité accidents',color_discrete_sequence=px.colors.sequential.RdBu)
     pie.update_layout(margin={"r":500})
     pie.show()
+
+
+
+def affichage_taille_features(df):
+    df.hist(bins=110, figsize=(30,25))
+    plt.show()
