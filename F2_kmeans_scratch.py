@@ -1,13 +1,16 @@
 import numpy as np
 from scipy.spatial.distance import cdist 
 import pandas as pd
-import seaborn as sns
 import random as rand
 import plotly.express as px
 import plotly.graph_objects as go
 
+from F2_evaluation import F2_Silhouette_Coefficient
+from F2_evaluation import F2_Calinski_Harabasz_Index
+from F2_evaluation import F2_Davies_Bouldin_Index
+
 pourcent = float(1) #pourcentage de la BDD utilisée (pour réduire temps de calcul si besoin)
-clusters = int(13) # nombre de clusters
+clusters = int(96) # nombre de clusters
 
 #retourne pour k clusters, k centroids aléatoirement choisi parmis tous les points de data
 def initialisationCentroids(k, data):
@@ -17,7 +20,7 @@ def initialisationCentroids(k, data):
         while any(np.all(l == centroid) for l in centroids): # pour éviter d'avoir deux fois les memes
             #print("deja present")
             centroid = all_vals[rand.randint(0, len(data))]
-           
+       
         centroids.append(centroid)
     
     centroids = pd.DataFrame(centroids, columns = data.columns)
@@ -44,7 +47,7 @@ def kmeansScratch(data,k, nb):
     #On répète l'opération nb fois pour augmenter précision
     print('----------')
     for l in range(nb):
-        print(l,'%')
+        print(round((l/nb)*100, 2)  ,'%') #affichage du pourcentage d'avancement du kmeans
         NCentroids = []
         for j in range(k):
             #Mise à jour des centroids en prenant la moyenne de tous les points y appartenant
@@ -67,8 +70,6 @@ def kmeansScratch(data,k, nb):
 #Import des données du csv
 coord = pd.read_csv('export.csv', dtype={0: str})
 
-colors=sns.color_palette("Set1", n_colors=clusters)
-
 coord = pd.DataFrame(data=coord, columns= ["latitude", "longitude"]).head(70000)
 coord = coord.sample(frac=pourcent).reset_index(drop=True) #frac permet de choisir le pourcentage des datas qu'on veut utiliser
 all_vals = coord.values
@@ -89,10 +90,21 @@ fig = px.scatter_geo(Ndata, locationmode='country names',
                          projection='natural earth', color='centroid',
                          color_discrete_sequence=px.colors.qualitative.Alphabet)
 fig.update_geos(fitbounds="locations", showcountries=True)
-fig.update_layout(title='Clusters accident en France en 2019 (K-Means)')
+fig.update_layout(title='Clusters accident en France en 2019 (K-Means scratch)')
 #ajout des centroids
 fig.add_trace(go.Scattergeo(locationmode='country names',
                                 lat=centroids.iloc[:,0], lon=centroids.iloc[:,1],
                                 marker=dict(size=15,color='red')))
 fig.show()
-print('finished')
+print('kmeans from scratch finished')
+
+print('calcul des coefficients')
+# Calcul des coeffs
+silhouette_coefficient2 = F2_Silhouette_Coefficient(Ndata[['latitude','longitude']] , Ndata['centroid'])
+calinski_harabasz_index2 = F2_Calinski_Harabasz_Index(Ndata[['latitude','longitude']] , Ndata['centroid'])
+davies_bouldin_index2 = F2_Davies_Bouldin_Index(Ndata[['latitude','longitude']] , Ndata['centroid'])
+
+# Afficher les coeffs
+print("Coefficient de silhouette :", silhouette_coefficient2)                    #Proche de 1 = bien (entre -1 et 1 la prise de valeur)
+print("Coefficient de Calsinki-Harabasz :", calinski_harabasz_index2)            #Proche de +infini = bien
+print("Coefficient de Davies-Bouldin :", davies_bouldin_index2)   
