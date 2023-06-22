@@ -2,7 +2,6 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import calinski_harabasz_score
 from sklearn.metrics import davies_bouldin_score
 
-
 def F2_Silhouette_Coefficient(data_pos, labels):
     # Calculer le coefficient de silhouette
     silhouette_coefficient = silhouette_score(data_pos, labels)

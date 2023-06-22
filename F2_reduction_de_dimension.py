@@ -4,6 +4,16 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
+
+def F2_Format_Date(data):
+    # Mettre la date qui est au format (MM/DD/YY hh:mm:ss) au format numérique : YMMDDhh
+    data["date"] = (data["date"].str.split('/').str[2].str.split(" ").str[0] +
+                    data["date"].str.split('/').str[0].str.split("(").str[1] + data["date"].str.split('/').str[1] +
+                    data["date"].str.split('/').str[2].str.split(" ").str[1].str.split(":").str[0]).astype(int)
+    return data
+
+
+
 # Fonction de réduction de dimension, on choisi arbitrairement a l'aide du tableau de corrélation
 # quelle colonne garder.
 # Prend en parametre le tableau des accident et retourne un tableau réduit à 4 colonnes
@@ -21,6 +31,8 @@ def F2_Reduction_Dimension_Manuelle(data):
 # dimensions correspondant aux combinaisons linéaire de nos colonnes.
 # Prend en parametre le tableau des accident et retourne un tableau réduit à 2 nouvelles dimensions
 def F2_Reduction_Dimension_PCA(data):
+    
+
     # Extraction des valeurs numériques de la DataFrame
     data_only_numeric = data.select_dtypes(include=['float64', 'int64', 'int32'])
 
