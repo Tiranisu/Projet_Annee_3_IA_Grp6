@@ -1,8 +1,7 @@
-#Affichage du pie chart du nombre d'instance par classe (gravité des accidents)
-import plotly.express as px
-import matplotlib.pyplot as plt
+from library import *
 
 def affichage_nombre_instances_par_classe(df):
+    #Affichage du pie chart du nombre d'instance par classe (gravité des accidents)
     gravite_list = df['descr_grav'].tolist()
     gravite_list = [int(x) for x in gravite_list if str(x) != 'nan']
     compte_gravite = [[x,gravite_list.count(x)] for x in set(gravite_list)]
@@ -22,5 +21,20 @@ def affichage_nombre_instances_par_classe(df):
 
 
 def affichage_taille_features(df):
-    df.hist(bins=110, figsize=(30,25))
+    #Affiche un histogramme des features
+    df.hist(bins=110, figsize=(15,10))
+    plt.tight_layout()
     plt.show()
+   
+   
+   
+df = pd.read_csv("export.csv") 
+    
+print("Les valeurs cible sont : " + str(df["descr_grav"].unique()))
+print("La longeur de la base est de : " + str(len(df)))
+
+print(str(df))
+
+# affichage_nombre_instances_par_classe(df)
+
+affichage_taille_features(df)

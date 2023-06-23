@@ -30,8 +30,8 @@ def KNN_scratch(X_train, X_test, y_train, y_test, NB_ITER,k):
 
     hamming_score = (good_predict_hamming/NB_ITER)
     euclidian_score = (good_predict_euclidian/NB_ITER)
-    print(hamming_score)
-    print(euclidian_score)
+    # print(hamming_score)
+    # print(euclidian_score)
     return hamming_score,euclidian_score
 
 
