@@ -72,11 +72,11 @@ def holdout_method(data):
 
 
         #KNN
-        # total_size=len(X_test) 
-        # NOMBRE_ITER = total_size #on peut mettre un nombre à la main pour réduire le temps d'execution
-        # score_H_temp,score_E_temp = KNN_scratch(X_train, X_test, y_train, y_test,NOMBRE_ITER,K)
-        # global_H_score+=score_H_temp
-        # global_E_score+=score_E_temp
+        total_size=len(X_test) 
+        NOMBRE_ITER = total_size #on peut mettre un nombre à la main pour réduire le temps d'execution
+        score_H_temp,score_E_temp = KNN_scratch(X_train, X_test, y_train, y_test,NOMBRE_ITER,K)
+        global_H_score+=score_H_temp
+        global_E_score+=score_E_temp
         
         
         
@@ -170,7 +170,7 @@ def holdout_method(data):
     Multilayer_Perceptron_matrix_save(X_train, X_test, y_train, y_test)
     plt.show()
     
-    # fusion(X_train, X_test, y_train, y_test)
+    fusion(X_train, X_test, y_train, y_test)
 
 
     
