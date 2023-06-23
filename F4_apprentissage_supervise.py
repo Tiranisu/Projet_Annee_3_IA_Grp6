@@ -2,7 +2,7 @@ from library import *
 
 
 def knn_for_web(csv,data,k):
-    data_reduit_ = csv[["date","descr_cat_veh","descr_agglo","descr_athmo","description_intersection","age","descr_dispo_secu","descr_type_col","descr_grav"]]
+    data_reduit_ = csv[["age","date","descr_cat_veh","descr_agglo","descr_athmo","description_intersection","descr_dispo_secu","descr_type_col","descr_grav"]]
     data_reduit_.loc[:,"date"]=(data_reduit_.loc[:,"date"].str.split(" ",expand=True)[1]).str.split(":",expand=True)[0]
     data_reduit_.loc[:,"age"]=round((data_reduit_.loc[:,"age"])/10)*10
 
@@ -20,17 +20,17 @@ def knn_for_web(csv,data,k):
     return predict_euclidian
     
 
-df = pd.read_csv(sys.argv[0]+".csv",low_memory=False)
-
+df = pd.read_csv(sys.argv[1]+".csv",low_memory=False)
+#df = pd.read_csv("export.csv",low_memory=False)
 #"age","date","descr_cat_veh","descr_agglo","descr_athmo","description_intersection","descr_dispo_secu","descr_type_col"
 
 #predict = knn_for_web(CSV,[DATA],K)
 #predict=knn_for_web(df,[10,2,1,1,1,14,2,2],10)
-predict=knn_for_web(df,[sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7],sys.argv[8]],sys.argv[9])
+
+predict=knn_for_web(df,[int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4]),int(sys.argv[5]),int(sys.argv[6]),int(sys.argv[7]),int(sys.argv[8]),int(sys.argv[9])],int(sys.argv[10]))
 
 
-
-value={"predict":predict}
+value={"predict":str(predict)}
 json_object =json.dumps(value)
 with open("out/predict.json", "w") as outfile:
     outfile.write(json_object)

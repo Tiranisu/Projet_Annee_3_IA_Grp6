@@ -1,3 +1,4 @@
+#Importation de toutes les librairies nécessaires
 from library import *
 
 
@@ -5,11 +6,13 @@ from library import *
 def Support_Vector_Machine_GridSearch(X_train, X_test, y_train, y_test):
     print("########## Support_Vector_Machine_GridSearch ##########")
     
+    #Définition des paramètres à tester
     param_grid = {
         'C': [0.1, 1, 10, 100, 500, 1000, 2000, 5000, 10000], 
         'gamma': [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]
     }
 
+    # Création du modèle
     svc = svm.SVC()
     clf = GridSearchCV(svc, param_grid, n_jobs=-1)
     clf.fit(X_train, y_train)
@@ -19,6 +22,7 @@ def Support_Vector_Machine_GridSearch(X_train, X_test, y_train, y_test):
     # print("Le meilleur score est  : ", clf.best_score_)
     # print("Les meileurs param sont : ", clf.best_params_)
     
+    #Sauvegarde du modèle dans le dossier out
     pd.DataFrame(clf.cv_results_).to_csv("out/MLP_GridSearch.csv")
     
     print("########## End ##########\n\n")
@@ -26,11 +30,13 @@ def Support_Vector_Machine_GridSearch(X_train, X_test, y_train, y_test):
 def Support_Vector_Machine(X_train, X_test, y_train, y_test):
     print("########## Support_Vector_Machine ##########")
     
+    #Création du modèle
     clf = svm.SVC()
     clf.fit(X_train, y_train)
 
     clf_pred = clf.predict(X_test)
 
+    #Calcul des scores
     accur_score = accuracy_score(y_test, clf_pred)
     prec_score = precision_score(y_test, clf_pred, average='macro', zero_division=1)
     rec_score = recall_score(y_test, clf_pred, average='macro')
@@ -39,6 +45,8 @@ def Support_Vector_Machine(X_train, X_test, y_train, y_test):
     # print("Le precision est de : ", prec_score)
     # print("Le recall est de : ", rec_score)
     # print("########## End ########## \n\n")
+    
+    #Retour des scores
     return accur_score, prec_score, rec_score
  
 def Support_Vector_Machine_upgrade(X_train, X_test, y_train, y_test):
