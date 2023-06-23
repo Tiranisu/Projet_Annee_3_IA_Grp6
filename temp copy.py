@@ -319,7 +319,7 @@ def affichage():
 
 
 def fusion(X_train, X_test, y_train, y_test):
-    clf1 = svm.SVC(C=100, gamma=0.001)
+    clf1 = svm.SVC(C=100, gamma=0.001, probability=True)
     clf2 = RandomForestClassifier(max_depth = 5, max_features = 4, n_estimators = 200)
     clf3 = MLPClassifier(alpha = 0.0001, max_iter = 500, hidden_layer_sizes=(100, 50))
     
@@ -336,8 +336,8 @@ def fusion(X_train, X_test, y_train, y_test):
     eclf2 = VotingClassifier(estimators=[('svm', clf1), ('rf', clf2), ('mlp', clf3)], voting='soft', n_jobs=-1, verbose=True)
     eclf2 = eclf2.fit(X_train, y_train)
     clf_pred2 = eclf2.predict(X_test)
-    # accur_score2 = accuracy_score(y_test, clf_pred2)
-    # print("Score de la fusion avec vote pondéré : ", accur_score2)
+    accur_score2 = accuracy_score(y_test, clf_pred2)
+    print("Score de la fusion avec vote pondéré : ", accur_score2)
 
 
 

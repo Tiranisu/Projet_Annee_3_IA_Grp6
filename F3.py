@@ -83,7 +83,6 @@ def holdout_method(data):
         
         #Algo haut niveau
         #Test des modèles normaux
-        print("pouet")
         sum_accur_score_svm_temp, sum_prec_score_svm_temp, sum_rec_score_svm_temp = Support_Vector_Machine(X_train, X_test, y_train, y_test)
         sum_accur_score_rf_temp, sum_prec_score_rf_temp, sum_rec_score_rf_temp = Random_Forest(X_train, X_test, y_train, y_test)
         sum_accur_score_mlp_temp, sum_prec_score_mlp_temp, sum_rec_score_mlp_temp = Multilayer_Perceptron(X_train, X_test, y_train, y_test)
@@ -341,8 +340,8 @@ df_reduced=pd.DataFrame()
 for j in range(0,4):
         df_reduced = pd.concat([df_reduced, data_reduit[data_reduit['descr_grav'] == j].sample(frac = 0.05)])
 
-# holdout_method(df_reduced)
-loo_method(df_reduced)
+holdout_method(df_reduced)
+# loo_method(df_reduced)
 
 
 
