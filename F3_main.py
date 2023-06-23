@@ -347,9 +347,13 @@ for j in range(0,4):
         df_reduced = pd.concat([df_reduced, data_reduit[data_reduit['descr_grav'] == j].sample(frac = 0.05)])
 
 
-#Choix de quelle fonction utiliser
+#Méthode avec 5% de la base
 holdout_method(df_reduced)
-# loo_method(df_reduced)
+loo_method(df_reduced)
+
+#Methode avec toute la base
+holdout_method(data_reduit)
+loo_method(data_reduit)
 
 
 
