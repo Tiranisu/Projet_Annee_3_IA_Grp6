@@ -1,18 +1,20 @@
 from library import *
 
 
-
+#Distance de Hamming
 def hamming_dist(x,y):
     return np.sum(x!=y,axis=1)
 
+#Distance Euclidienne
 def euclidian_dist(x,y):
     return np.sqrt(np.sum((y - x)**2,axis=1))
 
-
+#Fonction de KNN de Sklearn
 def KNN_sklearn(X_train, y_train, X_test):
     clf = KNeighborsClassifier().fit(X_train, y_train)
     print(clf.predict(X_test)) 
     
+#Fonction de KNN from scratch (utilisé pour les Holdout)
 def KNN_scratch(X_train, X_test, y_train, y_test, NB_ITER,k):
     X_train_fix=(X_train.loc[:,["age","date","descr_cat_veh","descr_agglo","descr_athmo","description_intersection","descr_dispo_secu","descr_type_col"]]).astype(int)
     X_test_fix=(X_test.loc[:,["age","date","descr_cat_veh","descr_agglo","descr_athmo","description_intersection","descr_dispo_secu","descr_type_col"]]).astype(int)
@@ -30,11 +32,9 @@ def KNN_scratch(X_train, X_test, y_train, y_test, NB_ITER,k):
 
     hamming_score = (good_predict_hamming/NB_ITER)
     euclidian_score = (good_predict_euclidian/NB_ITER)
-    # print(hamming_score)
-    # print(euclidian_score)
     return hamming_score,euclidian_score
 
-
+#Fonction de KNN from scratch (utilisé pour les LeaveOneOut)
 def predict_scratch(X_train, X_test, y_train, y_test,k):
     X_train_fix=(X_train.loc[:,["age","date","descr_cat_veh","descr_agglo","descr_athmo","description_intersection","descr_dispo_secu","descr_type_col"]]).astype(int)
     X_test_fix=(X_test[:])

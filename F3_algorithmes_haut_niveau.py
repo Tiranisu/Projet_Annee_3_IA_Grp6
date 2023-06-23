@@ -30,7 +30,7 @@ def Support_Vector_Machine_GridSearch(X_train, X_test, y_train, y_test):
 def Support_Vector_Machine(X_train, X_test, y_train, y_test):
     print("########## Support_Vector_Machine ##########")
     
-    #Création du modèle
+    #Création du modèle sans paramètre
     clf = svm.SVC()
     clf.fit(X_train, y_train)
 
@@ -52,11 +52,13 @@ def Support_Vector_Machine(X_train, X_test, y_train, y_test):
 def Support_Vector_Machine_upgrade(X_train, X_test, y_train, y_test):
     print("########## Support_Vector_Machine_up ##########")
     
+    #Création du modèle avec les paramètres trouvés dans la fonction Support_Vector_Machine_GridSearch
     clf = svm.SVC(C=100, gamma=0.001)
     clf.fit(X_train, y_train)
 
     clf_pred = clf.predict(X_test)
 
+    #Calcul des scores
     accur_score = accuracy_score(y_test, clf_pred)
     prec_score = precision_score(y_test, clf_pred, average='macro', zero_division=1)
     rec_score = recall_score(y_test, clf_pred, average='macro')
@@ -65,24 +67,31 @@ def Support_Vector_Machine_upgrade(X_train, X_test, y_train, y_test):
     # print("Le precision est de : ", prec_score)
     # print("Le recall est de : ", rec_score)
     # print("########## End ########## \n\n")
+    
+    #Retour des scores
     return accur_score, prec_score, rec_score
   
 def Support_Vector_Machine_matrix_save(X_train, X_test, y_train, y_test):
     print("########## Support_Vector_Machine_matrix ##########")
     
+    #Création du modèle
     clf = svm.SVC()
     clf.fit(X_train, y_train)
     clf_pred = clf.predict(X_test)
     
+    #Sauvegarde du modèle dans le dossier out
     dump(clf, 'out/Support_Vector_Machine.joblib') 
     
+    #Création de la matrice de confusion
     cm = confusion_matrix(y_test, clf_pred, normalize="all")
     
+    #Affichage de la matrice de confusion
     ConfusionMatrixDisplay(cm).plot()
     plt.title("Support Vector Machine :")
     plt.savefig('out/Support_Vector_Machine_matrix.png')
     
-   
+
+#Les commentaires s'applique à tous les algorithmes suivants   
     
     
 def Random_Forest_GridSearch(X_train, X_test, y_train, y_test):
@@ -235,6 +244,7 @@ def Multilayer_Perceptron_matrix_save(X_train, X_test, y_train, y_test):
     
 
 def affichage():
+    #Fonction pour l'affichage des résultats
     print("*---------------------------------*")
     print("Moyenne des scores pour SVM : ", sum_accur_score_svm/5)
     print("Moyenne des scores pour RF : ", sum_accur_score_rf/5)
@@ -282,6 +292,9 @@ def aux(data_temp):
 
 
 def fusion(X_train, X_test, y_train, y_test):
+    #Fonction pour la fusion des 3 classifieurs
+    
+    #Création des classifieurs
     clf1 = svm.SVC(C=100, gamma=0.001, probability=True)
     clf2 = RandomForestClassifier(max_depth = 5, max_features = 4, n_estimators = 200)
     clf3 = MLPClassifier(alpha = 0.0001, max_iter = 500, hidden_layer_sizes=(100, 50))
@@ -289,12 +302,13 @@ def fusion(X_train, X_test, y_train, y_test):
     #Pour une fusion avec un vote majoritaire
     eclf1 = VotingClassifier(estimators=[('svm', clf1), ('rf', clf2), ('mlp', clf3)], voting='hard', n_jobs=-1, verbose=True) 
     eclf1 = eclf1.fit(X_train, y_train)
+    #Prédiction des données de test
     clf_pred1 = eclf1.predict(X_test)
+    #Calcul du score
     accur_score1 = accuracy_score(y_test, clf_pred1)
+    #Affichage du score
     print("Score de la fusion avec vote majoritaire : ", accur_score1)
-    
-    clf_pred1 = X_test
-    
+        
     #Pour une fusion avec un vote pondéré
     eclf2 = VotingClassifier(estimators=[('svm', clf1), ('rf', clf2), ('mlp', clf3)], voting='soft', n_jobs=-1, verbose=True)
     eclf2 = eclf2.fit(X_train, y_train)

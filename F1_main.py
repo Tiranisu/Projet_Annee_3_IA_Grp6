@@ -33,7 +33,8 @@ df = pd.read_csv("export.csv")
 print("Les valeurs cible sont : " + str(df["descr_grav"].unique()))
 print("La longeur de la base est de : " + str(len(df)))
 
-print(str(df))
+#Affichage des types de données
+print(df.dtypes)
 
 # affichage_nombre_instances_par_classe(df)
 

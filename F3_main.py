@@ -32,7 +32,9 @@ sum_rec_score_mlp_upgrade=0
 
 
 def holdout_method(data):
+    #Répartition de la base en Train et Test (80/20)
     nb_split = len(data)//5
+    
     data_temp=data
     global_H_score=0
     global_E_score=0
@@ -66,7 +68,9 @@ def holdout_method(data):
     
     for _ in range(5):
         #PREP DONNEE END
+        #Mélange des données
         data_temp=shuffle(data_temp)
+        #Répartition des données
         X_test, X_train,y_test,y_train = data_temp[nb_split:].drop(["descr_grav"],axis=1), data_temp[:nb_split].drop(["descr_grav"],axis=1), data_temp[nb_split:]["descr_grav"], data_temp[:nb_split]["descr_grav"]
         #PREP DONNEE END
 
@@ -170,6 +174,7 @@ def holdout_method(data):
     Multilayer_Perceptron_matrix_save(X_train, X_test, y_train, y_test)
     plt.show()
     
+    #Lanceemnt du test de fusion
     fusion(X_train, X_test, y_train, y_test)
 
 
@@ -220,7 +225,7 @@ def loo_method(data):
         y_test=data_temp[:]["descr_grav"].iloc[i]
         y_train=data_train[:]["descr_grav"]
         X_train=data_train[:].drop(["descr_grav"],axis=1)
-        X_test_reshape = np.reshape(X_test.to_numpy(), (-1,8))
+        X_test_reshape = np.reshape(X_test.to_numpy(), (-1,8))  
         y_test_reshape = np.reshape(y_test, (-1,1))
 
         #KNN
@@ -336,10 +341,13 @@ data_reduit = df[["date","descr_cat_veh","descr_agglo","descr_athmo","descriptio
 data_reduit.loc[:,"date"]=(data_reduit.loc[:,"date"].str.split(" ",expand=True)[1]).str.split(":",expand=True)[0]
 data_reduit.loc[:,"age"]=round((data_reduit.loc[:,"age"])/10)*10
 
+#Reduction de la base à 5% de sa taille de manière aquivalente pour les 4 classes
 df_reduced=pd.DataFrame()
 for j in range(0,4):
         df_reduced = pd.concat([df_reduced, data_reduit[data_reduit['descr_grav'] == j].sample(frac = 0.05)])
 
+
+#Choix de quelle fonction utiliser
 holdout_method(df_reduced)
 # loo_method(df_reduced)
 
